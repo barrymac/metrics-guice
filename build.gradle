@@ -57,9 +57,9 @@ publishing {
         classifier 'sources'
       }
 
-      artifact javadocJar {
-        classifier 'javadoc'
-      }
+//      artifact javadocJar {
+//        classifier 'javadoc'
+//      }
     }
   }
 }

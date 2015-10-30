@@ -1,5 +1,7 @@
 package com.palominolabs.metrics.guice;
 
+import com.codahale.metrics.annotation.ExceptionMetered;
+
 import java.lang.annotation.*;
 
 /**
@@ -36,25 +38,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE, ElementType.CONSTRUCTOR, ElementType.METHOD })
 public @interface ExceptionPercentMetered {
-    /**
-     * The default suffix for meter names.
-     */
-    String DEFAULT_NAME_SUFFIX = "exceptions";
+    String DEFAULT_NAME_SUFFIX = "exceptionPercentage";
 
-    /**
-     * @return The name of the meter. If not specified, the meter will be given a name based on the method
-     * it decorates and the suffix "Exceptions".
-     */
     String name() default "";
 
-    /**
-     * @return If {@code true}, use the given name as an absolute name. If {@code false}, use the given name
-     * relative to the annotated class. When annotating a class, this must be {@code false}.
-     */
     boolean absolute() default false;
 
-    /**
-     * @return The type of exceptions that the meter will catch and count.
-     */
     Class<? extends Throwable> cause() default Exception.class;
 }

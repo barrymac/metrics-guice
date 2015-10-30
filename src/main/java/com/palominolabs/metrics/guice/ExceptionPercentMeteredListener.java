@@ -1,8 +1,8 @@
 package com.palominolabs.metrics.guice;
 
+import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.annotation.ExceptionMetered;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.TypeEncounter;
@@ -39,12 +39,21 @@ public class ExceptionPercentMeteredListener implements TypeListener {
 
     @Nullable
     private MethodInterceptor getInterceptor(MetricRegistry metricRegistry, Method method) {
-        final ExceptionMetered annotation = method.getAnnotation(ExceptionMetered.class);
+        final ExceptionPercentMetered annotation = method.getAnnotation(ExceptionPercentMetered.class);
         if (annotation != null) {
-            final Meter metere = metricRegistry.meter(metricNamer.getNameForExceptionMetered(method, annotation));
-            final Meter metert = metricRegistry.meter(metricNamer.getNameForExceptionMetered(method, annotation));
-            final Meter meterp = metricRegistry.meter(metricNamer.getNameForExceptionMetered(method, annotation));
-            return new ExceptionPercentMeteredInterceptor(metere, metert, meterp, annotation.cause());
+            final Meter metere = metricRegistry.meter(metricNamer.getNameForExceptionPercentMetered(method, annotation) +"-exceptions");
+            final Meter metert = metricRegistry.meter(metricNamer.getNameForExceptionPercentMetered(method, annotation) +"-total");
+
+
+            metricRegistry.register(metricNamer.getNameForExceptionPercentMetered(method, annotation) + "-exceptions_percentage",
+                    new Gauge<Double>() {
+                        @Override
+                        public Double getValue() {
+                            return (double)metere.getCount()/metert.getCount() * 100;
+                        }
+                    });
+
+            return new ExceptionPercentMeteredInterceptor(metere, metert, annotation.cause());
         }
         return null;
     }

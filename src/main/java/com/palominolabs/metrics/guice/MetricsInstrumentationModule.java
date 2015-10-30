@@ -63,5 +63,6 @@ public class MetricsInstrumentationModule extends AbstractModule {
         bindListener(matcher, new GaugeListener(metricRegistry, metricNamer));
         bindListener(matcher, new ExceptionMeteredListener(metricRegistry, metricNamer));
         bindListener(matcher, new CountedListener(metricRegistry, metricNamer));
+        bindListener(matcher, new ExceptionPercentMeteredListener(metricRegistry, metricNamer));
     }
 }

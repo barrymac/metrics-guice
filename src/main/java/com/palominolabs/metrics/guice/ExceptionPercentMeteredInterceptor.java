@@ -1,6 +1,8 @@
 package com.palominolabs.metrics.guice;
 
+import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -11,13 +13,11 @@ class ExceptionPercentMeteredInterceptor implements MethodInterceptor {
 
     private final Meter metere;
     private final Meter metert;
-    private final Meter meterp;
     private final Class<? extends Throwable> klass;
 
-    ExceptionPercentMeteredInterceptor(Meter metere, Meter metert, Meter meterp, Class<? extends Throwable> klass) {
+    ExceptionPercentMeteredInterceptor(Meter metere, Meter metert, Class<? extends Throwable> klass) {
         this.metere = metere;
         this.metert = metert;
-        this.meterp = meterp;
         this.klass = klass;
     }
 
@@ -32,7 +32,6 @@ class ExceptionPercentMeteredInterceptor implements MethodInterceptor {
             throw t;
         } finally{
             metert.mark();
-            meterp.mark(metere.getCount()/metert.getCount());
-        }
+            }
     }
 }

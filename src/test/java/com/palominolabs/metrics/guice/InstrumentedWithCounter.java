@@ -3,6 +3,11 @@ package com.palominolabs.metrics.guice;
 import com.codahale.metrics.annotation.Counted;
 
 public class InstrumentedWithCounter extends InstrumentedWithCounterParent {
+
+    public InstrumentedWithCounter() {
+        System.out.println("boom");
+    }
+
     @Counted(name = "things", monotonic = true)
     public String doAThing() {
         return "poop";
