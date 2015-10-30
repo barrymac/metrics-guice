@@ -54,6 +54,20 @@ public class DefaultMetricNamer implements MetricNamer {
     }
 
     @Nonnull
+    public String getNameForExceptionPercentMetered(@Nonnull Method method, @Nonnull ExceptionPercentMetered exceptionMetered) {
+        if (exceptionMetered.absolute()) {
+            return exceptionMetered.name();
+        }
+
+        if (exceptionMetered.name().isEmpty()) {
+            return
+                name(method.getDeclaringClass(), method.getName(), ExceptionPercentMetered.DEFAULT_NAME_SUFFIX);
+        }
+
+        return name(method.getDeclaringClass(), exceptionMetered.name());
+    }
+
+    @Nonnull
     @Override
     public String getNameForGauge(@Nonnull Method method, @Nonnull Gauge gauge) {
         if (gauge.absolute()) {
